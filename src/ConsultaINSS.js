@@ -33,7 +33,7 @@ const ConsultaINSS = () => {
         
         const URL = "https://api.ajin.io/v3/query-inss-balances/finder/await";
         const HEADERS = {
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjg4MzMxMjUtZWIyNi00MjVjLTg3NzAtM2QwNGFiMWM4ZWJlIiwic2Vzc2lvbl9pZCI6ImYyZGY1YTgzLTkyNGYtNDQ5NC04NDE1LTJlODc4ODk2ZWY5MiIsImhvc3QiOiJhcGkuYWppbi5pbyIsImlwIjoiMjAxLjAuMjEuMTQzIiwibmJmIjoxNzM3NDY0NzgyLCJleHAiOjE3Mzc1NTExODIsImlhdCI6MTczNzQ2NDc4Mn0.EInux5pL36BbttII7GD5zuItCz4cqOnGAvqRol6oHCU",
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjg4MzMxMjUtZWIyNi00MjVjLTg3NzAtM2QwNGFiMWM4ZWJlIiwic2Vzc2lvbl9pZCI6ImZhN2I1MjQ5LTMxMzktNDgwNi05M2YxLTQ3MDE0MTBkOGNhYiIsImhvc3QiOiJhcGkuYWppbi5pbyIsImlwIjoiMjAxLjAuMjEuMTQzIiwibmJmIjoxNzM3NTU0MjcyLCJleHAiOjE3Mzc2NDA2NzIsImlhdCI6MTczNzU1NDI3Mn0.wHUooA6WhOQ0QrlA6k7sqqlkrtDwdwT91GQc-VKUHg4",
             "Content-Type": "application/json"
         };
 
