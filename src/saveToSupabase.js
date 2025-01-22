@@ -40,7 +40,13 @@ export const saveToSupabase = async (dados) => {
                 data_consulta: dados.queryDate || null,
                 data_retorno_consulta: dados.queryReturnDate || null,
                 tempo_retorno_consulta: dados.queryReturnTime || null,
-                data_hora_registro: dataHoraConsulta // 🔹 Nova coluna adicionada
+                nome_representante_legal: dados.legalRepresentativeName || null,
+                banco_desembolso: dados.disbursementBankAccount?.bank || null,
+                agencia_desembolso: dados.disbursementBankAccount?.branch || null,
+                numero_conta_desembolso: dados.disbursementBankAccount?.number || null,
+                digito_conta_desembolso: dados.disbursementBankAccount?.digit || null,
+                numero_portabilidades: dados.numberOfPortabilities !== undefined ? dados.numberOfPortabilities : null,
+            data_hora_registro: dataHoraConsulta // 🔹 Nova coluna adicionada
             }
         ]);
 
