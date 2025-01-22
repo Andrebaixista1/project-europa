@@ -86,7 +86,10 @@ const ConsultaINSS = () => {
 
     return (
         <div className="container mt-5">
-            <h2>Consulta IN100 - Projeto Europa v0.1.2025</h2>
+            <div className="d-flex justify-content-between align-items-center">
+                <h2>Consulta IN100 - Qualibanking</h2>
+                <img src="https://i.postimg.cc/J0frsjvP/vieiracred-400-400.png" alt="Logo" style={{ height: "165px", margin: "-45px" }} />
+            </div>
             <div className="row mb-3">
                 <div className="col-md-4">
                     <label className="form-label">CPF:</label>
@@ -106,25 +109,28 @@ const ConsultaINSS = () => {
                     <table className="table table-bordered">
                         <tbody>
                         {Object.entries({
-                            "Número do Benefício": dados.benefitNumber,
-                            "Número do Documento": dados.documentNumber,
-                            "Nome": dados.name,
-                            "Estado": dados.state,
-                            "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
-                            "Data de Nascimento": formatDate(dados.birthDate),
-                            "Tipo de Bloqueio": dados.blockType === "not_blocked" ? "Nenhum" : dados.blockType,
-                            "Data de Concessão": formatDate(dados.grantDate),
-                            "Tipo de Crédito": dados.creditType,
-                            "Limite Cartão Benefício": dados.benefitCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus,
-                            "Data Fim Benefício": formatDate(dados.benefitEndDate),
-                            "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Crédito Consignado": dados.consignedCreditBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Total Máximo": dados.maxTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Total Utilizado": dados.usedTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
-                            "Saldo Total Disponível": dados.availableTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+                         "Número do Benefício": dados.benefitNumber,
+                         "Número do Documento": dados.documentNumber,
+                         "Nome": dados.name,
+                         "Estado": dados.state,
+                         "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
+                         "Data de Nascimento": formatDate(dados.birthDate),
+                         "Tipo de Bloqueio": dados.blockType === "not_blocked" ? "Nenhum" : dados.blockType,
+                         "Data de Concessão": formatDate(dados.grantDate),
+                         "Tipo de Crédito": dados.creditType,
+                         "Limite Cartão Benefício": dados.benefitCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus,
+                         "Data Fim Benefício": formatDate(dados.benefitEndDate),
+                         "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Crédito Consignado": dados.consignedCreditBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Total Máximo": dados.maxTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Total Utilizado": dados.usedTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Saldo Total Disponível": dados.availableTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+                         "Data da Consulta": formatDateTime(dados.queryDate),
+                         "Data de Retorno da Consulta": formatDateTime(dados.queryReturnDate),
+                         "Tempo de Retorno da Consulta": dados.queryReturnTime,
                         }).map(([key, value]) => (
                             <tr key={key}>
                                 <th>{key}</th>
