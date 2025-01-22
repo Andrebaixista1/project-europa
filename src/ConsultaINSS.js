@@ -38,7 +38,7 @@ const ConsultaINSS = () => {
         };
 
         try {
-            const response = await axios.post(URL, { identity: cpf, benefitNumber: nb }, { headers: HEADERS });
+            const response = await axios.post(URL, { identity: cpf, benefitNumber: nb, attempts: 10  }, { headers: HEADERS });
             setDados(response.data);
             toast.success(`Consulta realizada com sucesso! Status: ${response.status}`);
         } catch (error) {
