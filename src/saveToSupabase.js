@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-// 🔹 Substitua pelos valores copiados do Supabase
+// 🔹 Substitua pelos valores do seu Supabase
 const SUPABASE_URL = "https://zxbwehohahcuexwutzqr.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4YndlaG9oYWhjdWV4d3V0enFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc1NzQ4ODIsImV4cCI6MjA1MzE1MDg4Mn0.yLKStnqwWW5-S5VKGXpOtQJz8m0fPaSjddDdqZ2UCCo";
 
@@ -11,6 +11,9 @@ export const saveToSupabase = async (dados) => {
         console.error("⚠️ Nenhum dado disponível para salvar.");
         return;
     }
+
+    // Obtém a data e hora no formato dd/mm/aaaa hh:mm:ss
+    const dataHoraConsulta = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
     try {
         const { error } = await supabase.from("consultas_inss").insert([
@@ -36,7 +39,8 @@ export const saveToSupabase = async (dados) => {
                 saldo_total_disponivel: dados.availableTotalBalance || null,
                 data_consulta: dados.queryDate || null,
                 data_retorno_consulta: dados.queryReturnDate || null,
-                tempo_retorno_consulta: dados.queryReturnTime || null
+                tempo_retorno_consulta: dados.queryReturnTime || null,
+                data_hora_registro: dataHoraConsulta // 🔹 Nova coluna adicionada
             }
         ]);
 
