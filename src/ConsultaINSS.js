@@ -52,7 +52,7 @@ const ConsultaINSS = () => {
     const handleCopyTable = () => {
         if (!dados) return;
         
-        let tableText = "Consulta IN1100 - Projeto Europa v0.1.2025\n\n";
+        let tableText = "Consulta IN100 - Projeto Europa v0.1.2025\n\n";
         Object.entries({
             "Número do Benefício": dados.benefitNumber,
             "Número do Documento": dados.documentNumber,
@@ -67,9 +67,15 @@ const ConsultaINSS = () => {
             "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
             "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus,
             "Data Fim Benefício": formatDate(dados.benefitEndDate),
+            "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Crédito Consignado": dados.consignedCreditBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Máximo": dados.maxTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Utilizado": dados.usedTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Disponível": dados.availableTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
             "Data da Consulta": formatDateTime(dados.queryDate),
             "Data de Retorno da Consulta": formatDateTime(dados.queryReturnDate),
-            "Tempo de Retorno da Consulta": dados.queryReturnTime
+            "Tempo de Retorno da Consulta": dados.queryReturnTime,
         }).forEach(([key, value]) => {
             tableText += `${key}: ${value}\n`;
         });
@@ -89,7 +95,7 @@ const ConsultaINSS = () => {
                 </div>
             )}
             
-            <h2 className="mb-4">Consulta INSS</h2>
+            <h2 className="mb-4">Consulta IN100 - Projeto Europa v0.1.2025</h2>
 
             <div className="row mb-3">
                 <div className="col-md-4">
@@ -109,21 +115,29 @@ const ConsultaINSS = () => {
                 <div className="table-responsive mt-4">
                     <table className="table table-bordered">
                         <tbody>
-                            {Object.entries({
-                                "Número do Benefício": dados.benefitNumber,
-                                "Número do Documento": dados.documentNumber,
-                                "Nome": dados.name,
-                                "Estado": dados.state,
-                                "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
-                                "Data de Nascimento": formatDate(dados.birthDate),
-                                "Tipo de Bloqueio": dados.blockType === "not_blocked" ? "Nenhum" : dados.blockType,
-                                "Data de Concessão": formatDate(dados.grantDate),
-                                "Tipo de Crédito": dados.creditType,
-                                "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus,
-                                "Data Fim Benefício": formatDate(dados.benefitEndDate),
-                                "Data da Consulta": formatDateTime(dados.queryDate),
-                                "Data de Retorno da Consulta": formatDateTime(dados.queryReturnDate),
-                                "Tempo de Retorno da Consulta": dados.queryReturnTime
+                        {Object.entries({
+                               "Número do Benefício": dados.benefitNumber,
+            "Número do Documento": dados.documentNumber,
+            "Nome": dados.name,
+            "Estado": dados.state,
+            "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
+            "Data de Nascimento": formatDate(dados.birthDate),
+            "Tipo de Bloqueio": dados.blockType === "not_blocked" ? "Nenhum" : dados.blockType,
+            "Data de Concessão": formatDate(dados.grantDate),
+            "Tipo de Crédito": dados.creditType,
+            "Limite Cartão Benefício": dados.benefitCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus,
+            "Data Fim Benefício": formatDate(dados.benefitEndDate),
+            "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Crédito Consignado": dados.consignedCreditBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Máximo": dados.maxTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Utilizado": dados.usedTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Saldo Total Disponível": dados.availableTotalBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Data da Consulta": formatDateTime(dados.queryDate),
+            "Data de Retorno da Consulta": formatDateTime(dados.queryReturnDate),
+            "Tempo de Retorno da Consulta": dados.queryReturnTime,
                             }).map(([key, value]) => (
                                 <tr key={key}>
                                     <th>{key}</th>
