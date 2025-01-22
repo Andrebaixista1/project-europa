@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css"; // Importar o CSS personalizado
+import { saveToSupabase } from "./saveToSupabase";
+
 
 const API_URL = "https://api.ajin.io/v3/auth/sign-in";
 const credentials = {
@@ -67,49 +69,46 @@ const ConsultaINSS = () => {
             toast.info("CPF e Benefício são obrigatórios!");
             return;
         }
-
+    
         if (!token) {
             toast.error("Erro ao obter o token de autenticação!");
             return;
         }
-
-        setLoading(true); // Iniciar o carregamento
-
+    
+        setLoading(true);
+    
         const URL = "https://api.ajin.io/v3/query-inss-balances/finder/await";
         const HEADERS = {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
         };
-
+    
         try {
             const response = await axios.post(URL, { identity: cpf, benefitNumber: nb, attempts: 10 }, { headers: HEADERS });
-
+    
             setDados(response.data);
-
-            // Log para depuração
-            console.log("Tipo de Bloqueio:", response.data.blockType);
-
-            // Verificar o status da resposta e exibir a mensagem correspondente
+            await saveToSupabase(response.data); // 🟢 Salva os dados no Supabase
+    
             if (response.status === 200) {
-                toast.success("Dados carregados com sucesso");
+                toast.success("Dados carregados com sucesso!");
             } else if (response.status === 204) {
                 toast.info("Encontrei, porém não tem dados \\o/");
             } else {
                 toast.success(`Consulta realizada com sucesso! Status: ${response.status}`);
             }
-
         } catch (error) {
-            // Verificar se o erro tem resposta e o status é 400
             if (error.response && error.response.status === 400) {
-                toast.error("Infelizmente não achei nenhuma informação");
+                toast.error("Infelizmente não achei nenhuma informação.");
             } else {
                 toast.error(`Erro na consulta: ${error.response?.status || "Sem código"}`);
             }
             setDados(null);
         }
-
-        setLoading(false); // Finalizar o carregamento
+    
+        setLoading(false);
     };
+    
+    
 
     const handleCopy = () => {
         if (!dados) return;
