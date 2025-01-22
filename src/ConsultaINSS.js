@@ -121,15 +121,19 @@ const ConsultaINSS = () => {
             "Estado": dados.state || "-",
             "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
             "Data de Nascimento": formatDate(dados.birthDate),
-            "Tipo de Bloqueio": dados.blockType ? 
+            "Tipo de Bloqueio": dados.blockType ?
                 (dados.blockType.trim().toLowerCase() === "not_blocked" ? "Nenhum" :
-                 dados.blockType.trim().toLowerCase().includes("blocked") ? "Bloqueado" :
-                 dados.blockType) : "-",
+                    dados.blockType.trim().toLowerCase().includes("blocked") ? "Bloqueado" :
+                        dados.blockType) : "-",
             "Data de Concessão": formatDate(dados.grantDate),
-            "Tipo de Crédito": dados.creditType || "-",
+            "Tipo de Crédito": dados.creditType === "checking_account" ? "Conta Corrente" : "Cartão Magnético",
             "Limite Cartão Benefício": dados.benefitCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
             "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
-            "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus || "-",
+            "Status do Benefício":
+                dados.benefitStatus === "elegible" ? "Elegível" :
+                    dados.benefitStatus === "inelegible" ? "Inelegível" :
+                        "Bloqueado",
+
             "Data Fim Benefício": formatDate(dados.benefitEndDate),
             "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
             "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
@@ -147,11 +151,11 @@ const ConsultaINSS = () => {
             "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
             "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
             "Número de Portabilidades": dados.numberOfPortabilities !== undefined ? dados.numberOfPortabilities : "-",
-            "Número de Reservas Ativas": dados.numberOfActiveReservations !== undefined ? dados.numberOfActiveReservations : "-",
-            "Número de Reservas Suspensas": dados.numberOfSuspendedReservations !== undefined ? dados.numberOfSuspendedReservations : "-",
-            "Número de Reservas Refinanciadas": dados.numberOfRefinancedReservations !== undefined ? dados.numberOfRefinancedReservations : "-",
-            "Número de Reservas Ativas Suspensas": dados.numberOfActiveSuspendedReservations !== undefined ? dados.numberOfActiveSuspendedReservations : "-",
-        }).map(([key, value]) => `${key}: ${value}`).join("\n");
+            // "Número de Reservas Ativas": dados.numberOfActiveReservations !== undefined ? dados.numberOfActiveReservations : "-",
+            // "Número de Reservas Suspensas": dados.numberOfSuspendedReservations !== undefined ? dados.numberOfSuspendedReservations : "-",
+            // "Número de Reservas Refinanciadas": dados.numberOfRefinancedReservations !== undefined ? dados.numberOfRefinancedReservations : "-",
+            // "Número de Reservas Ativas Suspensas": dados.numberOfActiveSuspendedReservations !== undefined ? dados.numberOfActiveSuspendedReservations : "-",
+        }).map(([key, value]) => `*${key}*: ${value}`).join("\n");
 
         navigator.clipboard.writeText(dataToCopy)
             .then(() => {
@@ -210,15 +214,19 @@ const ConsultaINSS = () => {
                                 "Estado": dados.state || "-",
                                 "Pensão": dados.alimony === "payer" ? "SIM" : "NÃO",
                                 "Data de Nascimento": formatDate(dados.birthDate),
-                                "Tipo de Bloqueio": dados.blockType ? 
+                                "Tipo de Bloqueio": dados.blockType ?
                                     (dados.blockType.trim().toLowerCase() === "not_blocked" ? "Nenhum" :
-                                     dados.blockType.trim().toLowerCase().includes("blocked") ? "Bloqueado" :
-                                     dados.blockType) : "-",
+                                        dados.blockType.trim().toLowerCase().includes("blocked") ? "Bloqueado" :
+                                            dados.blockType) : "-",
                                 "Data de Concessão": formatDate(dados.grantDate),
-                                "Tipo de Crédito": dados.creditType === "checking_account" ? "Conta Corrente" : dados.creditType ,
+                                "Tipo de Crédito": dados.creditType === "checking_account" ? "Conta Corrente" : "Cartão Magnético",
                                 "Limite Cartão Benefício": dados.benefitCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
                                 "Saldo Cartão Benefício": dados.benefitCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
-                                "Status do Benefício": dados.benefitStatus === "elegible" ? "Elegível" : dados.benefitStatus || "-",
+                                "Status do Benefício":
+                                    dados.benefitStatus === "elegible" ? "Elegível" :
+                                        dados.benefitStatus === "inelegible" ? "Inelegível" :
+                                            "Bloqueado",
+
                                 "Data Fim Benefício": formatDate(dados.benefitEndDate),
                                 "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
                                 "Saldo Cartão Consignado": dados.consignedCardBalance?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) || "-",
@@ -236,10 +244,10 @@ const ConsultaINSS = () => {
                                 "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
                                 "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
                                 "Número de Portabilidades": dados.numberOfPortabilities !== undefined ? dados.numberOfPortabilities : "-",
-                                "Número de Reservas Ativas": dados.numberOfActiveReservations !== undefined ? dados.numberOfActiveReservations : "-",
-                                "Número de Reservas Suspensas": dados.numberOfSuspendedReservations !== undefined ? dados.numberOfSuspendedReservations : "-",
-                                "Número de Reservas Refinanciadas": dados.numberOfRefinancedReservations !== undefined ? dados.numberOfRefinancedReservations : "-",
-                                "Número de Reservas Ativas Suspensas": dados.numberOfActiveSuspendedReservations !== undefined ? dados.numberOfActiveSuspendedReservations : "-",
+                                // "Número de Reservas Ativas": dados.numberOfActiveReservations !== undefined ? dados.numberOfActiveReservations : "-",
+                                // "Número de Reservas Suspensas": dados.numberOfSuspendedReservations !== undefined ? dados.numberOfSuspendedReservations : "-",
+                                // "Número de Reservas Refinanciadas": dados.numberOfRefinancedReservations !== undefined ? dados.numberOfRefinancedReservations : "-",
+                                // "Número de Reservas Ativas Suspensas": dados.numberOfActiveSuspendedReservations !== undefined ? dados.numberOfActiveSuspendedReservations : "-",
                             }).map(([key, value]) => {
                                 // Determinar a classe com base no tipo de bloqueio
                                 let textClass = "";
