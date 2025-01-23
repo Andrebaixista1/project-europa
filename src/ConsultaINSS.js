@@ -5,28 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css"; // Importar o CSS personalizado
 import { saveToSupabase } from "./saveToSupabase";
+import { getAuthToken } from "./tokenGeneretor";
 
 
-const API_URL = "https://api.ajin.io/v3/auth/sign-in";
-const credentials = {
-    accessId: "jacqueline.vieira@qualiconsig.com.br",
-    password: "Jacque@324",
-    authKey: "",
-    type: "",
-    stayConnected: true
-};
-
-const getAuthToken = async () => {
-    try {
-        const response = await axios.post(API_URL, credentials, {
-            headers: { "Content-Type": "application/json" }
-        });
-        return response.data.token;
-    } catch (error) {
-        console.error("❌ Erro ao obter o token:", error.message);
-        return null;
-    }
-};
 
 const formatDate = (dateStr) => {
     if (!dateStr) return "-";
@@ -50,11 +31,11 @@ const ConsultaINSS = () => {
 
     useEffect(() => {
         const fetchToken = async () => {
-            const newToken = await getAuthToken();
-            setToken(newToken);
+          const newToken = await getAuthToken();
+          setToken(newToken);
         };
         fetchToken();
-    }, []);
+      }, []);
 
     useEffect(() => {
         if (loading) {
