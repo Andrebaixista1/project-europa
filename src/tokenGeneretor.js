@@ -17,7 +17,7 @@ async function getAuthToken() {
       }
     });
     const token = response.data.token;
-    console.log("🔑 Token Gerado:", token);
+    // console.log("🔑 Token Gerado:", token);
     return token;
   } catch (error) {
     console.error("❌ Erro ao obter o token:", error.message);

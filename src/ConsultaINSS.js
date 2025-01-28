@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css"; // Importar o CSS personalizado
 import { saveToSupabase } from "./saveToSupabase";
 import { getAuthToken } from "./tokenGeneretor";
+import ApiStatus from "./ApiStatus";
 
 const formatDate = (dateStr) => {
     if (!dateStr) return "-";
@@ -218,11 +219,12 @@ const ConsultaINSS = () => {
                     </div>
                 </div>
             )}
+            <ApiStatus/>
 
             <div className="d-flex justify-content-between align-items-center">
-                <h2>Consulta IN100 - Qualibanking</h2>
+                <h2>Vieira IN100</h2>
                 <img
-                    src="https://i.postimg.cc/J0frsjvP/vieiracred-400-400.png"
+                    src="https://i.postimg.cc/PJNBSjRS/IMG-20250124-WA0039.jpg"
                     alt="Logo"
                     style={{ height: "165px", margin: "-45px" }}
                 />
