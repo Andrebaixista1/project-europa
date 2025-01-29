@@ -1,45 +1,117 @@
-/* ConsultaINSS.css */
-
-/* Overlay que escurece o fundo */
+/* ======= LOADING SPINNER ======= */
 .spinner-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Certifique-se de que o overlay fique acima de outros elementos */
+    z-index: 9999;
 }
 
-/* Container do Spinner e Texto */
 .spinner-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Spinner */
 .spinner {
     width: 80px;
     height: 80px;
-    border: 12px solid #f3f3f3; /* Cor da borda */
-    border-top: 12px solid #3498db; /* Cor da borda superior */
+    border: 12px solid #f3f3f3;
+    border-top: 12px solid #3498db;
     border-radius: 50%;
-    animation: spin 1.5s linear infinite; /* Animação de rotação */
+    animation: spin 1.5s linear infinite;
 }
 
-/* Texto abaixo do Spinner */
 .spinner-text {
     margin-top: 16px;
-    color: #ffffff; /* Define a cor do texto como branco */
+    color: #ffffff;
     font-size: 1.2rem;
 }
 
-/* Animação de rotação */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ======= BARRA DE STATUS ======= */
+.status-bar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: start;
+}
+
+.status-bar span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* ======= LOGO CENTRALIZADA ======= */
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: -55px;
+    /* margin-top: -73px; */
+    /* height: 165px; */
+}
+
+/* ======= INPUTS E BOTÃO ALINHADOS ======= */
+.input-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: end;
+    gap: 10px; /* Espaço entre CPF, NB e botão */
+}
+
+/* Adicionando espaçamento entre os inputs */
+.input-container {
+    flex-grow: 1;
+}
+
+/* Faz o botão ocupar o espaço correto */
+.search-button {
+    height: 38px; /* Altura para igualar ao input */
+    white-space: nowrap; /* Evita quebra de linha no botão */
+}
+
+/* ======= RESPONSIVIDADE ======= */
+/* Esconde o título quando a largura for menor ou igual a 367px */
+@media (max-width: 367px) {
+    .titulo-vieira {
+        display: none !important;
+    }
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 576px) {
+    .container {
+        padding: 10px;
+    }
+
+    .form-control {
+        font-size: 1rem;
+    }
+
+    .status-bar {
+        justify-content: center;
+    }
+
+    .input-row {
+        flex-wrap: wrap; /* Faz o botão quebrar a linha em telas pequenas */
+        justify-content: center;
+    }
+
+    .search-button {
+        width: 100%; /* Botão ocupa a largura total */
+    }
 }

@@ -136,7 +136,7 @@ const ApiStatus = () => {
                 display: "inline-block",
                 marginRight: "10px"
             }}></span>
-            <strong>Status da API:</strong> {status}
+            <strong>Status da API:&nbsp;</strong> {status}
         </div>
     );
 };

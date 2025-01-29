@@ -1,6 +1,8 @@
+// src/components/ConsultaINSS.jsx
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css"; // Importar o CSS personalizado
@@ -28,13 +30,18 @@ const ConsultaINSS = () => {
     const [loading, setLoading] = useState(false);
     const [token, setToken] = useState("");
 
-    // ESTADO PARA ARMAZENAR AS INFORMAÇÕES DO BANCO (BrasilAPI)
+    // Estado para armazenar as informações do banco (BrasilAPI)
     const [bankInfo, setBankInfo] = useState(null);
 
     useEffect(() => {
         const fetchToken = async () => {
-            const newToken = await getAuthToken();
-            setToken(newToken);
+            try {
+                const newToken = await getAuthToken();
+                setToken(newToken);
+            } catch (error) {
+                console.error("Erro ao obter o token:", error);
+                toast.error("Erro ao obter o token de autenticação!");
+            }
         };
         fetchToken();
     }, []);
@@ -95,10 +102,10 @@ const ConsultaINSS = () => {
         setLoading(false);
     };
 
-    // USEEFFECT PARA BUSCAR AS INFORMAÇÕES DO BANCO BASEADO NO CÓDIGO (BrasilAPI)
+    // useEffect para buscar as informações do banco baseado no código (BrasilAPI)
     useEffect(() => {
         const fetchBankInfo = async () => {
-            // se não houver código de banco, não faz nada
+            // Se não houver código de banco, não faz nada
             const bankCode = dados?.disbursementBankAccount?.bank;
             if (!bankCode) {
                 setBankInfo(null);
@@ -136,8 +143,8 @@ const ConsultaINSS = () => {
                 ? dados.blockType.trim().toLowerCase() === "not_blocked"
                     ? "Nenhum"
                     : dados.blockType.trim().toLowerCase().includes("blocked")
-                    ? "Bloqueado"
-                    : dados.blockType
+                        ? "Bloqueado"
+                        : dados.blockType
                 : "-",
             "Data de Concessão": formatDate(dados.grantDate),
             "Tipo de Crédito":
@@ -156,8 +163,8 @@ const ConsultaINSS = () => {
                 dados.benefitStatus === "elegible"
                     ? "Elegível"
                     : dados.benefitStatus === "inelegible"
-                    ? "Inelegível"
-                    : "Bloqueado",
+                        ? "Inelegível"
+                        : "Bloqueado",
             "Data Fim Benefício": formatDate(dados.benefitEndDate),
             "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", {
                 style: "currency",
@@ -210,27 +217,28 @@ const ConsultaINSS = () => {
 
     return (
         <div className="container mt-5">
-            {/* Overlay de Carregamento */}
-            {loading && (
-                <div className="spinner-overlay">
-                    <div className="spinner-container">
-                        <div className="spinner"></div>
-                        <p className="spinner-text">Loading...</p>
-                    </div>
-                </div>
-            )}
-            <ApiStatus/>
+            {/* Inicializar react-toastify */}
+            <ToastContainer />
 
-            <div className="d-flex justify-content-between align-items-center">
-                <h2>Vieira IN100</h2>
+            {/* Barra de Status */}
+            <div className="status-bar">
+                <ApiStatus />
+            </div>
+
+            {/* Título que some em telas pequenas */}
+            {/* <h2 className="titulo-vieira">Vieira IN100</h2> */}
+
+            {/* Logo centralizado */}
+            <div className="logo-container">
                 <img
                     src="https://i.postimg.cc/PJNBSjRS/IMG-20250124-WA0039.jpg"
                     alt="Logo"
-                    style={{ height: "165px", margin: "-45px" }}
+                    style={{ height: "165px", margiBotton: "-55px", marginTop: "-73px" }}
                 />
             </div>
-            <div className="row mb-3">
-                <div className="col-md-4">
+
+            <div className="input-row">
+                <div className="col-md-4 input-container">
                     <label className="form-label">CPF:</label>
                     <input
                         type="text"
@@ -240,7 +248,7 @@ const ConsultaINSS = () => {
                         placeholder="Digite o CPF"
                     />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 input-container">
                     <label className="form-label">NB:</label>
                     <input
                         type="text"
@@ -250,9 +258,9 @@ const ConsultaINSS = () => {
                         placeholder="Digite o Número do Benefício"
                     />
                 </div>
-                <div className="col-md-4 d-flex align-items-end">
+                <div className="col-md-4">
                     <button
-                        className="btn btn-primary w-100"
+                        className="btn btn-primary w-100 search-button"
                         onClick={handleSearch}
                         disabled={loading}
                     >
@@ -282,8 +290,8 @@ const ConsultaINSS = () => {
                                     ? dados.blockType.trim().toLowerCase() === "not_blocked"
                                         ? "Nenhum"
                                         : dados.blockType.trim().toLowerCase().includes("blocked")
-                                        ? "Bloqueado"
-                                        : dados.blockType
+                                            ? "Bloqueado"
+                                            : dados.blockType
                                     : "-",
                                 "Data de Concessão": formatDate(dados.grantDate),
                                 "Tipo de Crédito":
@@ -302,8 +310,8 @@ const ConsultaINSS = () => {
                                     dados.benefitStatus === "elegible"
                                         ? "Elegível"
                                         : dados.benefitStatus === "inelegible"
-                                        ? "Inelegível"
-                                        : "Bloqueado",
+                                            ? "Inelegível"
+                                            : "Bloqueado",
                                 "Data Fim Benefício": formatDate(dados.benefitEndDate),
                                 "Limite Cartão Consignado": dados.consignedCardLimit?.toLocaleString("pt-BR", {
                                     style: "currency",
@@ -364,6 +372,16 @@ const ConsultaINSS = () => {
                             })}
                         </tbody>
                     </table>
+                </div>
+            )}
+
+            {/* Spinner de Carregamento */}
+            {loading && (
+                <div className="spinner-overlay">
+                    <div className="spinner-container">
+                        <div className="spinner"></div>
+                        <div className="spinner-text">Carregando...</div>
+                    </div>
                 </div>
             )}
         </div>
