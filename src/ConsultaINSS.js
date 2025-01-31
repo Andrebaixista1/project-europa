@@ -165,6 +165,7 @@ const ConsultaINSS = () => {
               : dados.blockType
           : "-",
         "Data de Concessão": formatDate(dados.grantDate),
+        "Data de Término do Benefício": dados.benefitEndDate || "-",
         "Tipo de Crédito":
           dados.creditType === "checking_account"
             ? "Conta Corrente"
@@ -285,7 +286,8 @@ const ConsultaINSS = () => {
                       ? "Bloqueado"
                       : dados.blockType
                   : "-",
-                "Data de Concessão": formatDate(dados.grantDate),
+                  "Data de Concessão": formatDate(dados.grantDate),
+                  "Data de Término do Benefício": dados.benefitEndDate || "-",
                 "Tipo de Crédito":
                   dados.creditType === "checking_account"
                     ? "Conta Corrente"
