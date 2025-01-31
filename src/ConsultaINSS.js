@@ -150,53 +150,55 @@ const ConsultaINSS = () => {
       : dados.disbursementBankAccount?.bank || "-";
 
     const dataToCopy = Object.entries({
-      "Beneficio": dados.benefitNumber || "-",
-      "CPF": dados.documentNumber || "-",
-      Nome: dados.name || "-",
-      Estado: dados.state || "-",
-      Pensão: dados.alimony === "payer" ? "SIM" : "NÃO",
-      "Data de Nascimento": formatDate(dados.birthDate),
-      "Idade": dados.age || "-",
-      "Tipo de Bloqueio": dados.blockType
-        ? dados.blockType.trim().toLowerCase() === "not_blocked"
-          ? "Nenhum"
-          : dados.blockType.trim().toLowerCase().includes("blocked")
-            ? "Bloqueado"
-            : dados.blockType
-        : "-",
-      "Data de Concessão": formatDate(dados.grantDate),
-      "Tipo de Crédito":
-        dados.creditType === "checking_account"
-          ? "Conta Corrente"
-          : "Cartão Magnético",
-      "Margem Cartão": dados.benefitCardBalance?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }) || "-",
-      "Status do Benefício":
-        dados.benefitStatus === "elegible"
-          ? "Elegível"
-          : dados.benefitStatus === "inelegible"
-            ? "Inelegível"
-            : "Bloqueado",
-      "Cartão Beneficio": dados.consignedCardBalance?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }) || "-",
-      "Margem Disponivel": dados.usedTotalBalance?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }) || "-",
-      "Nome do Representante Legal": dados.legalRepresentativeName || "-",
-      "Banco de Desembolso": bancoDesembolso,
-      "Agência de Desembolso": dados.disbursementBankAccount?.branch || "-",
-      "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
-      "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
-      "Quantidade de Emprestimos":
-        dados.numberOfActiveReservations !== undefined
-          ? dados.numberOfActiveReservations
+        "Beneficio": dados.benefitNumber || "-",
+        "CPF": dados.documentNumber || "-",
+        Nome: dados.name || "-",
+        Estado: dados.state || "-",
+        Pensão: dados.alimony === "payer" ? "SIM" : "NÃO",
+        "Data de Nascimento": formatDate(dados.birthDate),
+        "Idade": dados.age || "-",
+        "Tipo de Bloqueio": dados.blockType
+          ? dados.blockType.trim().toLowerCase() === "not_blocked"
+            ? "Nenhum"
+            : dados.blockType.trim().toLowerCase().includes("blocked")
+              ? "Bloqueado"
+              : dados.blockType
           : "-",
-    })
+        "Data de Concessão": formatDate(dados.grantDate),
+        "Tipo de Crédito":
+          dados.creditType === "checking_account"
+            ? "Conta Corrente"
+            : "Cartão Magnético",
+        "Margem Cartão": dados.benefitCardBalance?.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }) || "-",
+        "Cartão Beneficio": dados.consignedCardBalance?.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }) || "-",
+        "Margem Disponivel": dados.usedTotalBalance?.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }) || "-",
+        "Status do Benefício":
+          dados.benefitStatus === "elegible"
+            ? "Elegível"
+            : dados.benefitStatus === "inelegible"
+              ? "Inelegível"
+              : "Bloqueado",
+        "Nome do Representante Legal": dados.legalRepresentativeName || "-",
+        "Banco de Desembolso": bankInfo
+          ? `${bankInfo.code} - ${bankInfo.fullName}`
+          : dados.disbursementBankAccount?.bank || "-",
+        "Agência de Desembolso": dados.disbursementBankAccount?.branch || "-",
+        "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
+        "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
+        "Quantidade de Emprestimos":
+          dados.numberOfActiveReservations !== undefined
+            ? dados.numberOfActiveReservations
+            : "-",
+      })
       .map(([key, value]) => `*${key}*: ${value}`)
       .join("\n");
 
