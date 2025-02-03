@@ -178,7 +178,7 @@ const ConsultaINSS = () => {
           style: "currency",
           currency: "BRL",
         }) || "-",
-        "Margem Disponivel": dados.usedTotalBalance?.toLocaleString("pt-BR", {
+        "Margem Disponivel": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         }) || "-",
@@ -300,7 +300,7 @@ const ConsultaINSS = () => {
                   style: "currency",
                   currency: "BRL",
                 }) || "-",
-                "Margem Disponivel": dados.usedTotalBalance?.toLocaleString("pt-BR", {
+                "Margem Disponivel": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 }) || "-",
