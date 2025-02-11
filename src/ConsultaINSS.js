@@ -6,7 +6,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css";
-import { saveToSupabase } from "./saveToSupabase";
 import { getAuthToken } from "./tokenGeneretor";
 import ApiStatus from "./ApiStatus";
 
@@ -27,7 +26,7 @@ const formatDateTime = (dateTimeStr) => {
 const calcularIdade = (birthDate) => {
   if (!birthDate || birthDate.length !== 8) return "-";
   const dia = parseInt(birthDate.substring(0, 2), 10);
-  const mes = parseInt(birthDate.substring(2, 4), 10) - 1; // zero-based
+  const mes = parseInt(birthDate.substring(2, 4), 10) - 1;
   const ano = parseInt(birthDate.substring(4, 8), 10);
 
   const hoje = new Date();
@@ -97,13 +96,11 @@ const ConsultaINSS = () => {
       );
 
       const data = response.data;
-      // Calcula a idade e insere em data.age antes de setar em setDados
       if (data && data.birthDate) {
         data.age = calcularIdade(data.birthDate);
       }
 
       setDados(data);
-      await saveToSupabase(data);
 
       if (response.status === 200) {
         toast.success("Dados carregados com sucesso!");
@@ -150,56 +147,56 @@ const ConsultaINSS = () => {
       : dados.disbursementBankAccount?.bank || "-";
 
     const dataToCopy = Object.entries({
-        "Beneficio": dados.benefitNumber || "-",
-        "CPF": dados.documentNumber || "-",
-        Nome: dados.name || "-",
-        Estado: dados.state || "-",
-        Pensão: dados.alimony === "payer" ? "SIM" : "NÃO",
-        "Data de Nascimento": formatDate(dados.birthDate),
-        "Idade": dados.age || "-",
-        "Tipo de Bloqueio": dados.blockType
-          ? dados.blockType.trim().toLowerCase() === "not_blocked"
-            ? "Nenhum"
-            : dados.blockType.trim().toLowerCase().includes("blocked")
-              ? "Bloqueado"
-              : dados.blockType
+      "Beneficio": dados.benefitNumber || "-",
+      "CPF": dados.documentNumber || "-",
+      Nome: dados.name || "-",
+      Estado: dados.state || "-",
+      Pensão: dados.alimony === "payer" ? "SIM" : "NÃO",
+      "Data de Nascimento": formatDate(dados.birthDate),
+      "Idade": dados.age || "-",
+      "Tipo de Bloqueio": dados.blockType
+        ? dados.blockType.trim().toLowerCase() === "not_blocked"
+          ? "Nenhum"
+          : dados.blockType.trim().toLowerCase().includes("blocked")
+            ? "Bloqueado"
+            : dados.blockType
+        : "-",
+      "Data de Concessão": formatDate(dados.grantDate),
+      "Data de Término do Benefício": dados.benefitEndDate || "-",
+      "Tipo de Crédito":
+        dados.creditType === "checking_account"
+          ? "Conta Corrente"
+          : "Cartão Magnético",
+      "Margem Cartão": dados.benefitCardBalance?.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }) || "-",
+      "Cartão Beneficio": dados.consignedCardBalance?.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }) || "-",
+      "Margem Disponivel": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }) || "-",
+      "Status do Benefício":
+        dados.benefitStatus === "elegible"
+          ? "Elegível"
+          : dados.benefitStatus === "inelegible"
+            ? "Inelegível"
+            : "Bloqueado",
+      "Nome do Representante Legal": dados.legalRepresentativeName || "-",
+      "Banco de Desembolso": bankInfo
+        ? `${bankInfo.code} - ${bankInfo.fullName}`
+        : dados.disbursementBankAccount?.bank || "-",
+      "Agência de Desembolso": dados.disbursementBankAccount?.branch || "-",
+      "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
+      "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
+      "Quantidade de Emprestimos":
+        dados.numberOfActiveReservations !== undefined
+          ? dados.numberOfActiveReservations
           : "-",
-        "Data de Concessão": formatDate(dados.grantDate),
-        "Data de Término do Benefício": dados.benefitEndDate || "-",
-        "Tipo de Crédito":
-          dados.creditType === "checking_account"
-            ? "Conta Corrente"
-            : "Cartão Magnético",
-        "Margem Cartão": dados.benefitCardBalance?.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }) || "-",
-        "Cartão Beneficio": dados.consignedCardBalance?.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }) || "-",
-        "Margem Disponivel": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }) || "-",
-        "Status do Benefício":
-          dados.benefitStatus === "elegible"
-            ? "Elegível"
-            : dados.benefitStatus === "inelegible"
-              ? "Inelegível"
-              : "Bloqueado",
-        "Nome do Representante Legal": dados.legalRepresentativeName || "-",
-        "Banco de Desembolso": bankInfo
-          ? `${bankInfo.code} - ${bankInfo.fullName}`
-          : dados.disbursementBankAccount?.bank || "-",
-        "Agência de Desembolso": dados.disbursementBankAccount?.branch || "-",
-        "Número da Conta de Desembolso": dados.disbursementBankAccount?.number || "-",
-        "Dígito da Conta de Desembolso": dados.disbursementBankAccount?.digit || "-",
-        "Quantidade de Emprestimos":
-          dados.numberOfActiveReservations !== undefined
-            ? dados.numberOfActiveReservations
-            : "-",
-      })
+    })
       .map(([key, value]) => `*${key}*: ${value}`)
       .join("\n");
 
@@ -286,8 +283,8 @@ const ConsultaINSS = () => {
                       ? "Bloqueado"
                       : dados.blockType
                   : "-",
-                  "Data de Concessão": formatDate(dados.grantDate),
-                  "Data de Término do Benefício": dados.benefitEndDate || "-",
+                "Data de Concessão": formatDate(dados.grantDate),
+                "Data de Término do Benefício": dados.benefitEndDate || "-",
                 "Tipo de Crédito":
                   dados.creditType === "checking_account"
                     ? "Conta Corrente"
@@ -329,15 +326,13 @@ const ConsultaINSS = () => {
                     tipoBloqueio === "nenhum"
                       ? "text-success fw-bold"
                       : "text-danger fw-bold";
-                }
-                // Verifica a quantidade de empréstimos
-                else if (key === "Quantidade de Emprestimos") {
-                    const countEmprestimos = Number(value);
-                    if (countEmprestimos >= 13) {
+                } else if (key === "Quantidade de Emprestimos") {
+                  const countEmprestimos = Number(value);
+                  if (countEmprestimos >= 13) {
                     textClass = "text-danger fw-bold";
-                    } else if (countEmprestimos >= 10) {
+                  } else if (countEmprestimos >= 10) {
                     textClass = "text-danger fw-bold";
-                    }
+                  }
                 }
                 return (
                   <tr key={key}>
