@@ -1,13 +1,9 @@
 // src/components/ConsultaINSS.jsx
-
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ConsultaINSS.css";
-import { getAuthToken } from "./tokenGeneretor";
-import ApiStatus from "./ApiStatus";
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "-";
@@ -22,20 +18,16 @@ const formatDateTime = (dateTimeStr) => {
   return new Date(dateTimeStr).toLocaleString("pt-BR", { timeZone: "UTC" });
 };
 
-// Função para calcular a idade a partir de birthDate no formato DDMMYYYY
 const calcularIdade = (birthDate) => {
   if (!birthDate || birthDate.length !== 8) return "-";
   const dia = parseInt(birthDate.substring(0, 2), 10);
   const mes = parseInt(birthDate.substring(2, 4), 10) - 1;
   const ano = parseInt(birthDate.substring(4, 8), 10);
-
   const hoje = new Date();
   const dataNasc = new Date(ano, mes, dia);
-
   let idade = hoje.getFullYear() - dataNasc.getFullYear();
   const mesAtual = hoje.getMonth();
   const diaAtual = hoje.getDate();
-
   if (mesAtual < mes || (mesAtual === mes && diaAtual < dia)) {
     idade--;
   }
@@ -47,21 +39,7 @@ const ConsultaINSS = () => {
   const [nb, setNb] = useState("");
   const [dados, setDados] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState("");
   const [bankInfo, setBankInfo] = useState(null);
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const newToken = await getAuthToken();
-        setToken(newToken);
-      } catch (error) {
-        console.error("Erro ao obter o token:", error);
-        toast.error("Erro ao obter o token de autenticação!");
-      }
-    };
-    fetchToken();
-  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -76,32 +54,32 @@ const ConsultaINSS = () => {
       toast.info("CPF e Benefício são obrigatórios!");
       return;
     }
-    if (!token) {
-      toast.error("Erro ao obter o token de autenticação!");
-      return;
-    }
-
     setLoading(true);
-    const URL = "https://api.ajin.io/v3/query-inss-balances/finder/await";
-    const HEADERS = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
-
     try {
-      const response = await axios.post(
-        URL,
-        { identity: cpf, benefitNumber: nb, attempts: 10 },
-        { headers: HEADERS }
-      );
-
-      const data = response.data;
+      const response = await fetch("https://api.ajin.io/v3/query-inss-balances/finder/await", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apiKey: process.env.REACT_APP_API_KEY
+        },
+        body: JSON.stringify({
+          identity: cpf,
+          benefitNumber: nb,
+          lastDays: 0,
+          attempts: 60
+        })
+      });
+      const data = await response.json();
+      if (data.name === null) {
+        toast.error("Erro: Dados não encontrados!");
+        setDados(null);
+        setLoading(false);
+        return;
+      }
       if (data && data.birthDate) {
         data.age = calcularIdade(data.birthDate);
       }
-
       setDados(data);
-
       if (response.status === 200) {
         toast.success("Dados carregados com sucesso!");
       } else if (response.status === 204) {
@@ -110,11 +88,7 @@ const ConsultaINSS = () => {
         toast.success(`Consulta realizada com sucesso! Status: ${response.status}`);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        toast.error("Infelizmente não achei nenhuma informação.");
-      } else {
-        toast.error(`Erro na consulta: ${error.response?.status || "Sem código"}`);
-      }
+      toast.error(`Erro na consulta: ${error.message || "Sem código"}`);
       setDados(null);
     }
     setLoading(false);
@@ -128,10 +102,9 @@ const ConsultaINSS = () => {
         return;
       }
       try {
-        const response = await axios.get(
-          `https://brasilapi.com.br/api/banks/v1/${bankCode}`
-        );
-        setBankInfo(response.data);
+        const response = await fetch(`https://brasilapi.com.br/api/banks/v1/${bankCode}`);
+        const info = await response.json();
+        setBankInfo(info);
       } catch (error) {
         console.error("Erro ao buscar informações do banco:", error);
         setBankInfo(null);
@@ -145,7 +118,6 @@ const ConsultaINSS = () => {
     const bancoDesembolso = bankInfo
       ? `${bankInfo.code} - ${bankInfo.fullName}`
       : dados.disbursementBankAccount?.bank || "-";
-
     const dataToCopy = Object.entries({
       "Beneficio": dados.benefitNumber || "-",
       "CPF": dados.documentNumber || "-",
@@ -199,7 +171,6 @@ const ConsultaINSS = () => {
     })
       .map(([key, value]) => `*${key}*: ${value}`)
       .join("\n");
-
     navigator.clipboard
       .writeText(dataToCopy)
       .then(() => {
@@ -214,19 +185,13 @@ const ConsultaINSS = () => {
   return (
     <div className="container mt-5">
       <ToastContainer />
-
-      <div className="status-bar">
-        <ApiStatus />
-      </div>
-
       <div className="logo-container">
         <img
           src="https://i.postimg.cc/PJNBSjRS/IMG-20250124-WA0039.jpg"
           alt="Logo"
-          style={{ height: "165px", margiBotton: "-55px", marginTop: "-73px" }}
+          style={{ height: "165px", marginTop: "-73px" }}
         />
       </div>
-
       <div className="input-row">
         <div className="col-md-4 input-container">
           <label className="form-label">CPF:</label>
@@ -245,7 +210,7 @@ const ConsultaINSS = () => {
             className="form-control"
             value={nb}
             onChange={(e) => setNb(e.target.value)}
-            placeholder="Digite o Beneficio"
+            placeholder="Digite o Benefício"
           />
         </div>
         <div className="col-md-4">
@@ -258,7 +223,6 @@ const ConsultaINSS = () => {
           </button>
         </div>
       </div>
-
       {dados && (
         <div className="table-responsive mt-4">
           <div className="d-flex justify-content-start mb-2">
@@ -269,7 +233,7 @@ const ConsultaINSS = () => {
           <table className="table table-bordered">
             <tbody>
               {Object.entries({
-                "Beneficio": dados.benefitNumber || "-",
+                "Benefício": dados.benefitNumber || "-",
                 "CPF": dados.documentNumber || "-",
                 Nome: dados.name || "-",
                 Estado: dados.state || "-",
@@ -293,11 +257,11 @@ const ConsultaINSS = () => {
                   style: "currency",
                   currency: "BRL",
                 }) || "-",
-                "Cartão Beneficio": dados.consignedCardBalance?.toLocaleString("pt-BR", {
+                "Cartão Benefício": dados.consignedCardBalance?.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 }) || "-",
-                "Margem Disponivel": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
+                "Margem Disponível": dados.consignedCreditBalance?.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 }) || "-",
@@ -318,34 +282,16 @@ const ConsultaINSS = () => {
                   dados.numberOfActiveReservations !== undefined
                     ? dados.numberOfActiveReservations
                     : "-",
-              }).map(([key, value]) => {
-                let textClass = "";
-                if (key === "Tipo de Bloqueio") {
-                  const tipoBloqueio = value.trim().toLowerCase();
-                  textClass =
-                    tipoBloqueio === "nenhum"
-                      ? "text-success fw-bold"
-                      : "text-danger fw-bold";
-                } else if (key === "Quantidade de Emprestimos") {
-                  const countEmprestimos = Number(value);
-                  if (countEmprestimos >= 13) {
-                    textClass = "text-danger fw-bold";
-                  } else if (countEmprestimos >= 10) {
-                    textClass = "text-danger fw-bold";
-                  }
-                }
-                return (
-                  <tr key={key}>
-                    <th>{key}</th>
-                    <td className={textClass}>{value}</td>
-                  </tr>
-                );
-              })}
+              }).map(([key, value]) => (
+                <tr key={key}>
+                  <th>{key}</th>
+                  <td>{value}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       )}
-
       {loading && (
         <div className="spinner-overlay">
           <div className="spinner-container">
