@@ -313,7 +313,7 @@ const ConsultaINSS = () => {
           <strong>IP Externo: </strong>
           {ipExterno} <br />
           <strong>Limite Mensal: </strong>
-          {limiteMensal !== null ? limiteMensal : "Carregando..."}
+          {limiteMensal !== null ? limiteMensal.toLocaleString("pt-BR") : "Carregando..."}
         </div>
       </div>
 
