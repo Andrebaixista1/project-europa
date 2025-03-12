@@ -66,7 +66,7 @@ const ConsultaINSS = () => {
   // Busca o limite mensal no backend (seu servidor), passando o IP no cabeçalho
   const fetchLimiteMensal = async () => {
     try {
-      const response = await fetch("https://api-js-in100.vercel.app/api/limit", {
+      const response = await fetch("https://api-in100v2.vercel.app/api/limit", {
         headers: {
           "Content-Type": "application/json",
           "x-client-ip": ipExterno
@@ -141,7 +141,7 @@ const ConsultaINSS = () => {
       }
 
       // 2) Agora chama seu backend (rota /api/insert) para consumir 1 do limite
-      const responseInsert = await fetch("https://api-js-in100.vercel.app/api/insert", {
+      const responseInsert = await fetch("https://api-in100v2.vercel.app/api/insert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -313,7 +313,7 @@ const ConsultaINSS = () => {
           <strong>IP Externo: </strong>
           {ipExterno} <br />
           <strong>Limite Mensal: </strong>
-          {limiteMensal !== null ? limiteMensal.toLocaleString("pt-BR") : "Carregando..."}
+          {limiteMensal !== null ? Number(limiteMensal).toLocaleString("pt-BR") : "Carregando..."}
         </div>
       </div>
 
